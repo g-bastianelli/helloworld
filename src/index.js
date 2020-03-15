@@ -1,24 +1,24 @@
-export const recursiveLink = chars => {
+export const recursiveLinkedList = chars => {
   if (chars.length === 0) {
     return undefined;
   }
   return {
     value: chars.shift(),
-    child: recursiveLink(chars)
+    child: recursiveLinkedList(chars)
   };
 };
 
-export const recursiveImmutableLink = chars => {
+export const recursiveImmutableLinkedList = chars => {
   if (chars.length === 0) {
     return undefined;
   }
   return Object.freeze({
     value: chars.shift(),
-    child: recursiveImmutableLink(chars)
+    child: recursiveImmutableLinkedList(chars)
   });
 };
 
-export const longString = chars => {
+export const linkedListWithPointer = chars => {
   let result;
   while (chars.length > 0) {
     result = {

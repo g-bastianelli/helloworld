@@ -1,7 +1,12 @@
-import { longString, recursiveImmutableLink, recursiveLink } from "../index";
+import {
+  linkedListWithPointer,
+  recursiveImmutableLinkedList,
+  recursiveLinkedList
+} from "../index";
 import loremIpsum from "../lorem-ipsum";
 
 describe("Toto", () => {
+  const SMALL_STRING = "Hello World!";
   const EXPECTED = {
     child: {
       child: {
@@ -40,18 +45,18 @@ describe("Toto", () => {
     value: "H"
   };
 
-  describe("Test of recursiveLink.", () => {
+  describe("Test of recursiveLinkedList.", () => {
     test("Result is not immutable", () => {
-      const result = recursiveLink(Array.from("Hello World!"));
+      const result = recursiveLinkedList(Array.from(SMALL_STRING));
       expect(result).toEqual(EXPECTED);
       result.child.child.value = "Hi! I'm the new value";
       expect(result).not.toEqual(EXPECTED);
     });
   });
 
-  describe("Test of recursiveImmutableLink.", () => {
+  describe("Test of recursiveImmutableLinkedList.", () => {
     test("Result is immutable", async () => {
-      const result = recursiveImmutableLink(Array.from("Hello World!"));
+      const result = recursiveImmutableLinkedList(Array.from("Hello World!"));
       expect(result).toEqual(EXPECTED);
       expect(() => {
         result.child.child.value = "Hi! I'm the new value";
@@ -65,13 +70,15 @@ describe("Toto", () => {
 
   describe("Test on long string.", () => {
     test("recursive should explose.", async () => {
-      expect(() => recursiveLink(Array.from(loremIpsum))).toThrow(
+      expect(() => recursiveLinkedList(Array.from(loremIpsum))).toThrow(
         new Error("Maximum call stack size exceeded")
       );
     });
 
     test("pointer should do the job.", async () => {
-      expect(() => longString(Array.from(loremIpsum))).toMatchSnapshot();
+      expect(() =>
+        linkedListWithPointer(Array.from(loremIpsum))
+      ).toMatchSnapshot();
     });
   });
 });
