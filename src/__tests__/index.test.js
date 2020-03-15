@@ -1,4 +1,5 @@
-import {recursiveImmutableLink, recursiveLink} from "../index";
+import { longString, recursiveImmutableLink, recursiveLink } from "../index";
+import loremIpsum from "../lorem-ipsum";
 
 describe("Toto", () => {
   const EXPECTED = {
@@ -49,11 +50,28 @@ describe("Toto", () => {
   });
 
   describe("Test of recursiveImmutableLink.", () => {
-    test("Result is not immutable", () => {
+    test("Result is immutable", async () => {
       const result = recursiveImmutableLink(Array.from("Hello World!"));
       expect(result).toEqual(EXPECTED);
-      result.child.child.value = "Hi! I'm the new value";
-      expect(result).toEqual(EXPECTED);
+      expect(() => {
+        result.child.child.value = "Hi! I'm the new value";
+      }).toThrow(
+        new Error(
+          "Cannot assign to read only property 'value' of object '#<Object>'"
+        )
+      );
+    });
+  });
+
+  describe("Test on long string.", () => {
+    test("recursive should explose.", async () => {
+      expect(() => recursiveLink(Array.from(loremIpsum))).toThrow(
+        new Error("Maximum call stack size exceeded")
+      );
+    });
+
+    test("pointer should do the job.", async () => {
+      expect(() => longString(Array.from(loremIpsum))).toMatchSnapshot();
     });
   });
 });

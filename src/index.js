@@ -14,14 +14,17 @@ export const recursiveImmutableLink = chars => {
   }
   return Object.freeze({
     value: chars.shift(),
-    child: recursiveLink(chars)
+    child: recursiveImmutableLink(chars)
   });
 };
 
-// (async () => {
-//   const linkedList = Object.freeze(recursiveLink(Array.from("Hello World!")));
-//   console.log(JSON.stringify(linkedList, null, 2));
-//
-//   linkedList.child.child.value = "Hi! I'm the new value";
-//   console.log(JSON.stringify(linkedList, null, 2));
-// })();
+export const longString = chars => {
+  let result;
+  while (chars.length > 0) {
+    result = {
+      value: chars.pop(),
+      child: result
+    };
+  }
+  return result;
+};
